@@ -1,6 +1,6 @@
 # cdp-browser-mcp
 
-An MCP server for browser automation that uses Chrome's native Accessibility API instead of injected JavaScript. Returns the **full page** in a single compact snapshot — **3–5x fewer tokens** than chrome-devtools-mcp and Playwright MCP.
+An MCP server for browser automation that uses Chrome's native Accessibility API instead of injected JavaScript. Returns the **full page** in a single compact snapshot — **3.3x fewer tokens** than chrome-devtools-mcp and **4.6x fewer** than Playwright MCP.
 
 One `cdp_navigate` call returns a compact DOM with every interactive element indexed — ready for clicking, typing, and reading.
 
@@ -10,23 +10,23 @@ LLM-driven browser automation has a token problem. Every page snapshot eats cont
 
 | Tool | Median tokens | Full page? | Notes |
 |---|---|---|---|
-| [browser-use](https://github.com/browser-use/browser-use) (80K+ stars) | ~1,500 per viewport | Viewport only | Needs scroll calls to see full page |
-| **[browser-autopilot](https://www.npmjs.com/package/browser-autopilot) / cdp-browser-mcp** | **~3,300** | **Full page** | Complete DOM in 1 call |
-| [chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) (Google, 28K+ stars) | ~8,500 | Full page | Verbose AX tree format |
-| [Playwright MCP](https://github.com/microsoft/playwright-mcp) | ~17,000 | Full page | YAML ariaSnapshot format |
+| [browser-use](https://github.com/browser-use/browser-use) (80K+ stars) | ~2,000 per viewport | Viewport only | Needs scroll calls to see full page |
+| **[browser-autopilot](https://www.npmjs.com/package/browser-autopilot) / cdp-browser-mcp** | **~3,800** | **Full page** | Complete DOM in 1 call |
+| [chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) (Google, 28K+ stars) | ~10,900 | Full page | Verbose AX tree format |
+| [Playwright MCP](https://github.com/microsoft/playwright-mcp) | ~17,400 | Full page | YAML ariaSnapshot format |
 
-**browser-use** has the smallest per-viewport size because it filters to viewport-visible elements only. But when you need the full page, scrolling adds up fast. We measured the actual full-page cost by scrolling browser-use through each page and summing all viewport snapshots (approximate tokens = characters ÷ 4):
+**browser-use** has the smallest per-viewport size because it filters to viewport-visible elements only. But when you need the full page, scrolling adds up fast. We measured the actual full-page cost by scrolling browser-use through each page and summing all viewport snapshots:
 
 | Page | browser-use (full page) | cdp-browser-mcp (1 call) | Ratio |
 |---|---|---|---|
-| Wikipedia | 61,270 (19 scrolls) | **6,087** | 10x more |
-| YouTube | 40,055 (4 scrolls)† | **3,338** | 12x more |
-| Shoelace | 20,442 (9 scrolls) | **3,317** | 6.2x more |
-| BBC News | 12,185 (7 scrolls) | **4,647** | 2.6x more |
-| DataTables | 6,099 (4 scrolls) | **2,001** | 3x more |
-| GitHub Issues | **592** (fits in viewport) | 3,832 | browser-use wins |
-| Excalidraw | 781 (fits in viewport) | **220** | 3.5x more |
-| example.com | 34 (fits in viewport) | **29** | ~same |
+| Wikipedia | 66,067 (19 scrolls) | **7,092** | 9.3x more |
+| YouTube | 50,544 (4 scrolls)† | **3,961** | 12.8x more |
+| Shoelace | 26,295 (9 scrolls) | **3,705** | 7.1x more |
+| BBC News | 15,624 (7 scrolls) | **4,288** | 3.6x more |
+| DataTables | 8,874 (4 scrolls) | **2,332** | 3.8x more |
+| GitHub Issues | **874** (fits in viewport) | 4,006 | browser-use wins |
+| Excalidraw | 986 (fits in viewport) | **282** | 3.5x more |
+| example.com | 28 (fits in viewport) | **31** | ~same |
 
 † YouTube has infinite scroll — we capped at 4 viewports (initial page height) for a fair comparison.
 
@@ -154,7 +154,9 @@ Use the `[N]` index with `cdp_click` or `cdp_type`. Non-interactive content (hea
 
 All benchmarks ran on the same machine (Mac Mini, Chrome 145) with all 5 tools connecting to the same Chrome instance via CDP on port 9222. Same viewport size (1,309 × 1,309px), same pages, same session.
 
-**What the numbers measure:** Each tool returns a text representation of the page (accessibility tree, DOM snapshot, or YAML). We measure the **character count** of that output and estimate tokens as **characters ÷ 4**. This is a rough approximation — actual tokenizer counts vary by model — but the ratios between tools hold regardless of tokenizer.
+**What the numbers measure:** Each tool returns a text representation of the page (accessibility tree, DOM snapshot, or YAML). We tokenized every raw snapshot using [tiktoken](https://github.com/openai/tiktoken) (`cl100k_base` encoding). All token counts in the tables below are **real tokenizer output**, not estimates.
+
+Earlier versions of this benchmark used characters ÷ 4 as a rough proxy. Actual tokenization showed this underestimates by 4–20% depending on the tool's format — structured text with brackets, short attribute names, and numbers tokenizes less efficiently than prose. The ratios between tools also shifted because each format tokenizes at a different rate (e.g. browser-use averages 3.3 chars/token, cdp-browser-mcp averages 3.6, chrome-devtools-mcp averages 3.2).
 
 **How snapshots were captured:** Navigate to URL → wait 2–3 seconds for page load → capture the tool's DOM/accessibility representation. Each tool uses its own serialization format (see [format comparison](#why-the-differences) below).
 
@@ -162,28 +164,28 @@ All benchmarks ran on the same machine (Mac Mini, Chrome 145) with all 5 tools c
 
 ### Per-snapshot results (8 page types, 2026-03-07)
 
-All values are approximate tokens (characters ÷ 4):
+All values are tokens measured with tiktoken `cl100k_base`. browser-use shows both per-viewport and full-page cost (sum of all scroll positions):
 
 | # | Page type | browser-use (viewport) | browser-use (full page) | cdp-browser-mcp | chrome-devtools-mcp | Playwright MCP |
 |---|---|---|---|---|---|---|
-| 1 | Wikipedia (static article) | 2,502 | 61,270 (19 scrolls) | **6,087** | 57,288 | 55,238 |
-| 2 | DataTables (data table) | 1,555 | 6,099 (4 scrolls) | **2,001** | 7,859 | 9,242 |
-| 3 | Excalidraw (canvas app) | 781 | 781 | **220** | 876 | 1,622 |
-| 4 | GitHub Issues (React SPA) | **592** | **592** | 3,832 | 4,647 | 17,599 |
-| 5 | YouTube (iframe-heavy) | 9,166 | 40,055 (4 scrolls)† | **3,338** | 8,453 | 17,002 |
-| 6 | Shoelace (web components) | 1,794 | 20,442 (9 scrolls) | **3,317** | 10,391 | 17,627 |
-| 7 | example.com (minimal) | 34 | 34 | **29** | 90 | 79 |
-| 8 | BBC News (news + ads) | 1,421 | 12,185 (7 scrolls) | **4,647** | 11,577 | 17,192 |
+| 1 | Wikipedia (static article) | 2,698 | 66,067 (19 scrolls) | **7,092** | 67,946 | 58,138 |
+| 2 | DataTables (data table) | 2,265 | 8,874 (4 scrolls) | **2,332** | 8,960 | 9,632 |
+| 3 | Excalidraw (canvas app) | 980 | 986 | **282** | 1,075 | 1,553 |
+| 4 | GitHub Issues (React SPA) | **899** | **874** | 4,006 | 9,616 | 17,597 |
+| 5 | YouTube (iframe-heavy) | 11,510 | 50,544 (4 scrolls)† | **3,961** | 12,246 | 17,161 |
+| 6 | Shoelace (web components) | 2,320 | 26,295 (9 scrolls) | **3,705** | 12,120 | 17,739 |
+| 7 | example.com (minimal) | 28 | 28 | **31** | 98 | 87 |
+| 8 | BBC News (news + ads) | 1,819 | 15,624 (7 scrolls) | **4,288** | 13,232 | 20,798 |
 
-† YouTube has infinite scroll — new content lazy-loads as you scroll. We capped at 4 viewports (covering the initial 4,318px page height) for a fair comparison. Uncapped, browser-use hit 326,706 tokens across 30 scrolls without reaching the bottom.
+† YouTube has infinite scroll — new content lazy-loads as you scroll. We capped at 4 viewports (covering the initial 4,318px page height) for a fair comparison.
 
 cdp-browser-mcp is a thin MCP wrapper around [`browser-autopilot`](https://www.npmjs.com/package/browser-autopilot)'s `CDPBrowser` — they produce identical snapshots (verified by running both independently on all 8 pages). The MCP layer adds zero token overhead.
 
-**browser-use full-page cost:** When you need to see the entire page, browser-use's per-viewport advantage disappears. Wikipedia costs 61K tokens across 19 scrolls vs 6K in a single cdp-browser-mcp call (10x). YouTube costs 40K across 4 scrolls vs 3.3K (12x). browser-use wins only on pages that fit in a single viewport (GitHub Issues: 592 vs 3,832).
+**browser-use full-page cost:** When you need to see the entire page, browser-use's per-viewport advantage disappears. Wikipedia costs 66K tokens across 19 scrolls vs 7K in a single cdp-browser-mcp call (9.3x). YouTube costs 51K across 4 scrolls vs 4K (12.8x). browser-use wins only on pages that fit in a single viewport (GitHub Issues: 874 vs 4,006).
 
-**cdp-browser-mcp vs chrome-devtools-mcp:** median **3.1x fewer tokens**, range 1.2x–9.4x.
+**cdp-browser-mcp vs chrome-devtools-mcp:** median **3.3x fewer tokens**, range 2.4x–9.6x.
 
-**cdp-browser-mcp vs Playwright MCP:** median **4.9x fewer tokens**, range 2.7x–9.1x.
+**cdp-browser-mcp vs Playwright MCP:** median **4.6x fewer tokens**, range 2.8x–8.2x.
 
 ### Why the differences?
 

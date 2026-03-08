@@ -1,0 +1,217 @@
+{
+  "viewport_tokens": {
+    "browseruse": {
+      "1": {
+        "chars": 10007,
+        "tiktoken": 2698,
+        "ratio": 3.71
+      },
+      "3": {
+        "chars": 6225,
+        "tiktoken": 2265,
+        "ratio": 2.75
+      },
+      "4": {
+        "chars": 3106,
+        "tiktoken": 980,
+        "ratio": 3.17
+      },
+      "5": {
+        "chars": 2433,
+        "tiktoken": 899,
+        "ratio": 2.71
+      },
+      "6": {
+        "chars": 36463,
+        "tiktoken": 11510,
+        "ratio": 3.17
+      },
+      "7": {
+        "chars": 7216,
+        "tiktoken": 2320,
+        "ratio": 3.11
+      },
+      "9": {
+        "chars": 138,
+        "tiktoken": 28,
+        "ratio": 4.93
+      },
+      "10": {
+        "chars": 5675,
+        "tiktoken": 1819,
+        "ratio": 3.12
+      }
+    },
+    "cdp": {
+      "1": {
+        "chars": 24347,
+        "tiktoken": 7092,
+        "ratio": 3.43
+      },
+      "3": {
+        "chars": 8004,
+        "tiktoken": 2332,
+        "ratio": 3.43
+      },
+      "4": {
+        "chars": 880,
+        "tiktoken": 282,
+        "ratio": 3.12
+      },
+      "5": {
+        "chars": 15328,
+        "tiktoken": 4006,
+        "ratio": 3.83
+      },
+      "6": {
+        "chars": 13348,
+        "tiktoken": 3961,
+        "ratio": 3.37
+      },
+      "7": {
+        "chars": 13266,
+        "tiktoken": 3705,
+        "ratio": 3.58
+      },
+      "9": {
+        "chars": 115,
+        "tiktoken": 31,
+        "ratio": 3.71
+      },
+      "10": {
+        "chars": 18586,
+        "tiktoken": 4288,
+        "ratio": 4.33
+      }
+    },
+    "google": {
+      "1": {
+        "chars": 229153,
+        "tiktoken": 67946,
+        "ratio": 3.37
+      },
+      "3": {
+        "chars": 31435,
+        "tiktoken": 8960,
+        "ratio": 3.51
+      },
+      "4": {
+        "chars": 3503,
+        "tiktoken": 1075,
+        "ratio": 3.26
+      },
+      "5": {
+        "chars": 18588,
+        "tiktoken": 9616,
+        "ratio": 1.93
+      },
+      "6": {
+        "chars": 33799,
+        "tiktoken": 12246,
+        "ratio": 2.76
+      },
+      "7": {
+        "chars": 41563,
+        "tiktoken": 12120,
+        "ratio": 3.43
+      },
+      "9": {
+        "chars": 361,
+        "tiktoken": 98,
+        "ratio": 3.68
+      },
+      "10": {
+        "chars": 46309,
+        "tiktoken": 13232,
+        "ratio": 3.5
+      }
+    },
+    "playwright": {
+      "1": {
+        "chars": 220819,
+        "tiktoken": 58138,
+        "ratio": 3.8
+      },
+      "5": {
+        "chars": 70340,
+        "tiktoken": 17597,
+        "ratio": 4.0
+      },
+      "3": {
+        "chars": 36961,
+        "tiktoken": 9632,
+        "ratio": 3.84
+      },
+      "4": {
+        "chars": 6463,
+        "tiktoken": 1553,
+        "ratio": 4.16
+      },
+      "6": {
+        "chars": 67894,
+        "tiktoken": 17161,
+        "ratio": 3.96
+      },
+      "7": {
+        "chars": 70404,
+        "tiktoken": 17739,
+        "ratio": 3.97
+      },
+      "9": {
+        "chars": 316,
+        "tiktoken": 87,
+        "ratio": 3.63
+      },
+      "10": {
+        "chars": 68753,
+        "tiktoken": 20798,
+        "ratio": 3.31
+      }
+    }
+  },
+  "browseruse_fullpage": {
+    "1": {
+      "totalChars": 245108,
+      "totalTokens_estimated": 66067,
+      "numScrolls": 19
+    },
+    "3": {
+      "totalChars": 24403,
+      "totalTokens_estimated": 8874,
+      "numScrolls": 4
+    },
+    "4": {
+      "totalChars": 3127,
+      "totalTokens_estimated": 986,
+      "numScrolls": 1
+    },
+    "5": {
+      "totalChars": 2369,
+      "totalTokens_estimated": 874,
+      "numScrolls": 1
+    },
+    "6": {
+      "totalChars": 1306864,
+      "totalTokens_estimated": 412260,
+      "cappedChars": 160224,
+      "cappedTokens_estimated": 50544,
+      "numScrolls": 30,
+      "cappedScrolls": 4
+    },
+    "7": {
+      "totalChars": 81778,
+      "totalTokens_estimated": 26295,
+      "numScrolls": 9
+    },
+    "9": {
+      "totalChars": 137,
+      "totalTokens_estimated": 28,
+      "numScrolls": 1
+    },
+    "10": {
+      "totalChars": 48748,
+      "totalTokens_estimated": 15624,
+      "numScrolls": 7
+    }
+  }
+}
