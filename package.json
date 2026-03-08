@@ -1,0 +1,20 @@
+{
+  "name": "cdp-browser-mcp",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "MCP server for browser automation via Chrome DevTools Protocol. 5.5x fewer tokens than Playwright MCP.",
+  "main": "server.mjs",
+  "bin": {
+    "cdp-browser-mcp": "server.mjs"
+  },
+  "keywords": ["mcp", "browser", "cdp", "chrome", "automation", "playwright", "claude"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/echo-lumen/cdp-browser-mcp"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.11.0",
+    "browser-autopilot": "^0.5.1"
+  }
+}
