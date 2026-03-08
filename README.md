@@ -217,20 +217,11 @@ Notes:
 
 No stealth advantage at the fingerprinting level — they all present as real Chrome.
 
-**Real-world anti-bot (Amazon):** Fingerprinting tests don't tell the full story. We tested all tools on an Amazon search page (`/s?k=mechanical+keyboard`), and the results diverged:
+**Real-world anti-bot (Amazon):** During the initial benchmark run, Amazon served a 503 error page ("Sorry! Something went wrong!") to cdp-browser-mcp, chrome-devtools-mcp, and Playwright MCP — but loaded full search results for browser-use. All four tools were connected to the **same Chrome instance** via CDP.
 
-| Tool | Result | Tokens |
-|---|---|---|
-| browser-use | Full search results loaded | 7,340 |
-| cdp-browser-mcp | "Sorry! Something went wrong!" (503) | 91 |
-| chrome-devtools-mcp | Same 503 error page | 291 |
-| Playwright MCP | Same 503 error page | 230 |
+We re-tested Amazon separately and all tools — including cdp-browser-mcp — loaded the full page without issue. The original blocking was likely **rate-based**: running 5 tools in rapid succession against the same pages triggered Amazon's request-rate detection, and the order tools ran in determined who got blocked (browser-use ran first).
 
-All four tools connected to the **same Chrome instance** via CDP. Same browser, same IP, same cookies — yet Amazon served different responses. browser-use got the full page while the other three hit Amazon's server-side bot detection.
-
-The likely cause isn't fingerprinting (identical browser) but **navigation behavior**: how each tool makes HTTP requests, handles redirects, and manages request timing. Amazon's anti-bot operates at the request/session level, not the browser level, and different tools' navigation patterns trigger it differently.
-
-Takeaway: basic fingerprinting tests (sannysoft, Cloudflare) show all tools as identical. But real-world anti-bot systems are more sophisticated, and tool behavior at the network level can make a difference that browser-level tests don't reveal.
+Takeaway: basic fingerprinting tests (sannysoft, Cloudflare) show all tools as identical. Real-world anti-bot systems like Amazon's add server-side rate limiting that can produce inconsistent results depending on test conditions — but no tool has an inherent advantage.
 
 Raw benchmark data (JSON results + sample snapshots) is available in the [`benchmarks/`](benchmarks/) directory.
 
