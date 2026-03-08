@@ -201,9 +201,42 @@ No detection advantage to any tool — they all present as real Chrome.
 
 ## How it works
 
-This server wraps [`browser-autopilot`](https://www.npmjs.com/package/browser-autopilot)'s `CDPBrowser` class, which reads Chrome's Accessibility tree via the Chrome DevTools Protocol. The key insight: Chrome already computes a semantic accessibility tree for screen readers. Instead of injecting JavaScript to walk the DOM and guess which elements are interactive, we just read what Chrome already knows.
+This server is a thin MCP wrapper around [`browser-autopilot`](https://www.npmjs.com/package/browser-autopilot)'s `CDPBrowser` class, which reads Chrome's Accessibility tree via the Chrome DevTools Protocol. The key insight: Chrome already computes a semantic accessibility tree for screen readers. Instead of injecting JavaScript to walk the DOM and guess which elements are interactive, we just read what Chrome already knows.
 
 The result is a compact, accurate representation of the page that naturally filters out SVG paths, hidden elements, and decorative wrappers — exactly the noise that inflates other tools' token counts.
+
+## Built on browser-autopilot
+
+[`browser-autopilot`](https://www.npmjs.com/package/browser-autopilot) is the underlying engine by [@eigengajesh](https://github.com/nichochar). It's a full autonomous browser agent framework that goes well beyond what this MCP server exposes:
+
+| Capability | cdp-browser-mcp | browser-autopilot |
+|---|---|---|
+| CDP browser control | 17 MCP tools | Full CDPBrowser class + 25+ agent tools |
+| Compact AX tree snapshots | Yes (the whole point) | Yes (this is where it comes from) |
+| Autonomous agent loop | No (you're the agent) | Yes — multi-step LLM-driven via Vercel AI SDK |
+| X11 fallback (Linux) | No | Yes — real mouse/keyboard when CDP gets blocked |
+| Login orchestration | No | Yes — cached sessions, CDP login, X11 fallback |
+| CAPTCHA solving | No | Yes — Capsolver, 2Captcha integration |
+| File upload/paste | No | Yes — `upload_file`, `paste_content`, `paste_image` |
+| Docker/cloud deployment | No | Yes — Xvfb, noVNC, containerized |
+
+If you need the MCP interface for Claude Code / Claude Desktop / Cursor — use this server. If you need the full autonomous agent framework for headless pipelines or authenticated workflows — use `browser-autopilot` directly.
+
+```bash
+npm install browser-autopilot ai zod
+```
+
+```ts
+import { CDPBrowser, runAgent } from "browser-autopilot";
+
+const browser = new CDPBrowser();
+await browser.connect();
+
+const { result, success } = await runAgent({
+  browser,
+  task: "Go to wikipedia.org and find the population of Tokyo.",
+});
+```
 
 ## License
 
