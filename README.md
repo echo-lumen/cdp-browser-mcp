@@ -1,20 +1,23 @@
 # cdp-browser-mcp
 
-An MCP server for browser automation that uses Chrome's native Accessibility API instead of injected JavaScript. **3–5x fewer tokens** than chrome-devtools-mcp and Playwright MCP per page snapshot.
+An MCP server for browser automation that uses Chrome's native Accessibility API instead of injected JavaScript. Returns the **full page** in a single compact snapshot — **3–5x fewer tokens** than chrome-devtools-mcp and Playwright MCP.
 
 One `cdp_navigate` call returns a compact DOM with every interactive element indexed — ready for clicking, typing, and reading.
 
 ## Why this exists
 
-LLM-driven browser automation has a token problem. Every page snapshot eats context window. We benchmarked 4 browser tools across 8 page types and found:
+LLM-driven browser automation has a token problem. Every page snapshot eats context window. We benchmarked 5 browser tools across 8 page types:
 
-| Tool | Median tokens | vs this tool |
-|---|---|---|
-| **[browser-autopilot](https://www.npmjs.com/package/browser-autopilot) / cdp-browser-mcp** | **~3,300** | — |
-| [chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) (Google, 28K+ stars) | ~8,500 | 3.1x more |
-| [Playwright MCP](https://github.com/nichochar/playwright-mcp) | ~17,000 | 4.9x more |
+| Tool | Median tokens/snapshot | Full page? | Notes |
+|---|---|---|---|
+| [browser-use](https://github.com/browser-use/browser-use) (80K+ stars) | ~1,500 | Viewport only | Needs scroll calls to see full page |
+| **[browser-autopilot](https://www.npmjs.com/package/browser-autopilot) / cdp-browser-mcp** | **~3,300** | **Full page** | Complete DOM in 1 call |
+| [chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) (Google, 28K+ stars) | ~8,500 | Full page | Verbose AX tree format |
+| [Playwright MCP](https://github.com/microsoft/playwright-mcp) | ~17,000 | Full page | YAML ariaSnapshot format |
 
-The difference: [browser-autopilot](https://www.npmjs.com/package/browser-autopilot) reads Chrome's built-in Accessibility tree via CDP and compresses it into a compact indexed format. cdp-browser-mcp wraps that engine as an MCP server with zero token overhead. No JavaScript injection, no DOM walking, no SVG noise, no redundant `StaticText` nodes. Just the semantic structure the browser already computed.
+**browser-use** has the smallest per-snapshot size because it filters to viewport-visible elements only. But for a page like Wikipedia (14 pages of content), you'd need ~15 scroll calls at ~2,500 tokens each (~37,500 total) vs our single 6,087-token snapshot of the full page.
+
+**cdp-browser-mcp** gives you the full page in one call — the most token-efficient approach when you need to see or search across the entire page. Built on [browser-autopilot](https://www.npmjs.com/package/browser-autopilot), which reads Chrome's Accessibility tree via CDP and compresses it into a compact indexed format. No JavaScript injection, no DOM walking, no SVG noise.
 
 ## Quick start
 
@@ -136,70 +139,68 @@ Use the `[N]` index with `cdp_click` or `cdp_type`. Non-interactive content (hea
 
 Tested across diverse page types — static content, SPAs, canvas apps, web components, news sites. All values are approximate tokens (chars/4):
 
-| # | Page type | browser-autopilot / cdp-browser-mcp | chrome-devtools-mcp | Playwright MCP |
-|---|---|---|---|---|
-| 1 | Wikipedia (static article) | **6,087** | 57,288 | 55,238 |
-| 2 | DataTables (data table) | **2,001** | 7,859 | 9,242 |
-| 3 | Excalidraw (canvas app) | **220** | 876 | 1,622 |
-| 4 | GitHub Issues (React SPA) | **3,832** | 4,647 | 17,599 |
-| 5 | YouTube (iframe-heavy) | **3,338** | 8,453 | 17,002 |
-| 6 | Shoelace (web components) | **3,317** | 10,391 | 17,627 |
-| 7 | example.com (minimal) | **29** | 90 | 79 |
-| 8 | BBC News (news + ads) | **4,647** | 11,577 | 17,192 |
+| # | Page type | browser-use | cdp-browser-mcp | chrome-devtools-mcp | Playwright MCP |
+|---|---|---|---|---|---|
+| 1 | Wikipedia (static article) | 2,501 | **6,087** | 57,288 | 55,238 |
+| 2 | DataTables (data table) | 1,556 | **2,001** | 7,859 | 9,242 |
+| 3 | Excalidraw (canvas app) | 776 | **220** | 876 | 1,622 |
+| 4 | GitHub Issues (React SPA) | 608 | **3,832** | 4,647 | 17,599 |
+| 5 | YouTube (iframe-heavy) | 9,115 | **3,338** | 8,453 | 17,002 |
+| 6 | Shoelace (web components) | 1,804 | **3,317** | 10,391 | 17,627 |
+| 7 | example.com (minimal) | 34 | **29** | 90 | 79 |
+| 8 | BBC News (news + ads) | 1,418 | **4,647** | 11,577 | 17,192 |
 
 cdp-browser-mcp is a thin MCP wrapper around [`browser-autopilot`](https://www.npmjs.com/package/browser-autopilot)'s `CDPBrowser` — they produce identical snapshots (verified by running both independently on all 8 pages). The MCP layer adds zero token overhead.
 
-**vs chrome-devtools-mcp (Google, 28K+ stars):** median **3.1x fewer tokens**, range 1.2x–9.4x.
-**vs Playwright MCP:** median **4.9x fewer tokens**, range 2.7x–9.1x.
+**browser-use vs cdp-browser-mcp:** browser-use wins 5/8 pages on per-snapshot size because it filters to viewport-visible elements only. But it requires scroll calls to see content below the fold — on Wikipedia, that's 14+ scrolls at ~2,500 tokens each.
 
-Why the difference? All four tools read some form of accessibility tree, but the output format matters:
+**cdp-browser-mcp vs chrome-devtools-mcp:** median **3.1x fewer tokens**, range 1.2x–9.4x.
 
-| Tool | Snapshot format | Overhead |
+**cdp-browser-mcp vs Playwright MCP:** median **4.9x fewer tokens**, range 2.7x–9.1x.
+
+### Why the differences?
+
+| Tool | Snapshot strategy | Format |
 |---|---|---|
-| **browser-autopilot / cdp-browser-mcp** | Compact indexed — `[N] role "name"`, text inlined | Minimal |
-| **chrome-devtools-mcp** | Puppeteer AX tree — `uid=` prefix on every node, separate `StaticText` children | ~3x |
-| **Playwright MCP** | YAML `ariaSnapshot()` — `[ref=]` tags, nested indentation, verbose structure | ~5x |
+| **[browser-use](https://github.com/browser-use/browser-use)** | Viewport only + paint order filtering + 100-char text cap | `[N]<tag attr=val />` with HTML-like syntax |
+| **browser-autopilot / cdp-browser-mcp** | Full page, all elements | `[N] role "name"` — compact indexed, text inlined |
+| **chrome-devtools-mcp** | Full page via Puppeteer | `uid=` prefix on every node, separate `StaticText` children |
+| **Playwright MCP** | Full page via ariaSnapshot | YAML with `[ref=]` tags, nested indentation |
 
 Notes:
-- Amazon blocked all tools equally (anti-bot). GitHub login/dashboard differed due to auth state. Both excluded from ratios.
-- chrome-devtools-mcp has additional capabilities not tested here (performance tracing, Lighthouse audits, network inspection, device emulation) — it's a broader tool aimed at web development debugging.
-- Token advantage is largest on content-heavy pages (Wikipedia 9.4x vs Google, 9.1x vs Playwright) and smallest on already-compact pages.
-
-### Single-page deep comparison (x.com/simonw)
-
-| Metric | browser-autopilot / cdp-browser-mcp | chrome-devtools-mcp | Playwright MCP |
-|---|---|---|---|
-| Approximate tokens | **~2,700** | ~8,500* | ~14,700 |
-| Elements indexed | 177 | — | ~200 |
-| Tool calls needed | 1 | 2 (navigate + snapshot) | 2–3 |
-
-*chrome-devtools-mcp estimate based on the median ratio from multi-page benchmarks (single-page x.com test not run for this tool).
+- Amazon blocked cdp-browser-mcp and chrome-devtools-mcp (anti-bot) but loaded for browser-use (5,368 tokens). GitHub login/dashboard differed due to auth state. Both excluded from cross-tool ratios.
+- chrome-devtools-mcp has additional capabilities not tested here (performance tracing, Lighthouse audits, network inspection, device emulation).
+- browser-use has additional capabilities not tested here (autonomous agent loop, CAPTCHA solving, vision mode with screenshots).
 
 ### Anti-bot detection
 
 All tools tested identically against bot.sannysoft.com (30/30 pass) and Cloudflare Turnstile:
 
-| Signal | cdp-browser-mcp | Playwright MCP |
-|---|---|---|
-| `navigator.webdriver` | `false` | `false` |
-| Chrome object present | Yes | Yes |
-| Plugin count | 5 | 5 |
-| Sannysoft pass rate | 30/30 | 30/30 |
-| Cloudflare Turnstile | Challenge shown | Challenge shown |
+| Signal | Result (all tools) |
+|---|---|
+| `navigator.webdriver` | `false` |
+| Chrome object present | Yes |
+| Plugin count | 5 |
+| Sannysoft pass rate | 30/30 |
+| Cloudflare Turnstile | Challenge shown |
 
-No detection advantage to any tool — they all present as real Chrome.
+No detection advantage to any tool — they all present as real Chrome. browser-use uses Playwright (which sets `navigator.webdriver = false` by default). cdp-browser-mcp and chrome-devtools-mcp connect to your existing Chrome instance.
 
 ## When to use other tools instead
 
+**[browser-use](https://github.com/browser-use/browser-use)** (80K+ stars):
+- You want an autonomous agent that drives the browser with an LLM loop (not just MCP tools)
+- You prefer viewport-only snapshots (smaller per call, but requires scrolling)
+- You need built-in CAPTCHA solving or vision-based interaction
+- You're building a Python pipeline, not using Claude Code/Desktop
+
 **[chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp)** (Google, 28K+ stars):
 - You need performance profiling, Lighthouse audits, or memory snapshots
-- You need network request inspection
-- You want device emulation
+- You need network request inspection or device emulation
 - You're debugging a web app, not automating browser tasks for an LLM agent
 
-**[Playwright MCP](https://github.com/nichochar/playwright-mcp)**:
+**[Playwright MCP](https://github.com/microsoft/playwright-mcp)**:
 - Chrome on port 9222 isn't running (Playwright launches its own browser)
-- You need bio/prose text natively in the accessibility snapshot (without a second `cdp_page_text` call)
 - You need Playwright-specific features like file upload or form fill helpers
 
 ## How it works
