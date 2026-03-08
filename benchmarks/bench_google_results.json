@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "name": "Wikipedia (static article)",
+    "snapChars": 229153,
+    "snapTokens": 57288,
+    "navChars": 137,
+    "navTokens": 34,
+    "navTime": 1011,
+    "snapTime": 78,
+    "totalTime": 1089
+  },
+  {
+    "id": 2,
+    "name": "GitHub login",
+    "snapChars": 8704,
+    "snapTokens": 2176,
+    "navChars": 94,
+    "navTokens": 24,
+    "navTime": 1798,
+    "snapTime": 29,
+    "totalTime": 1827
+  },
+  {
+    "id": 3,
+    "name": "DataTables",
+    "snapChars": 31435,
+    "snapTokens": 7859,
+    "navChars": 183,
+    "navTokens": 46,
+    "navTime": 832,
+    "snapTime": 20,
+    "totalTime": 852
+  },
+  {
+    "id": 4,
+    "name": "Excalidraw (canvas)",
+    "snapChars": 3503,
+    "snapTokens": 876,
+    "navChars": 96,
+    "navTokens": 24,
+    "navTime": 785,
+    "snapTime": 6,
+    "totalTime": 791
+  },
+  {
+    "id": 5,
+    "name": "GitHub Issues (React SPA)",
+    "snapChars": 18588,
+    "snapTokens": 4647,
+    "navChars": 161,
+    "navTokens": 40,
+    "navTime": 897,
+    "snapTime": 20,
+    "totalTime": 917
+  },
+  {
+    "id": 6,
+    "name": "YouTube",
+    "snapChars": 33812,
+    "snapTokens": 8453,
+    "navChars": 137,
+    "navTokens": 34,
+    "navTime": 5219,
+    "snapTime": 56,
+    "totalTime": 5275
+  },
+  {
+    "id": 7,
+    "name": "Shoelace (web components)",
+    "snapChars": 41563,
+    "snapTokens": 10391,
+    "navChars": 131,
+    "navTokens": 33,
+    "navTime": 497,
+    "snapTime": 33,
+    "totalTime": 530
+  },
+  {
+    "id": 8,
+    "name": "Amazon",
+    "snapChars": 934,
+    "snapTokens": 234,
+    "navChars": 143,
+    "navTokens": 36,
+    "navTime": 2163,
+    "snapTime": 4,
+    "totalTime": 2167
+  },
+  {
+    "id": 9,
+    "name": "example.com",
+    "snapChars": 361,
+    "snapTokens": 90,
+    "navChars": 90,
+    "navTokens": 23,
+    "navTime": 168,
+    "snapTime": 2,
+    "totalTime": 170
+  },
+  {
+    "id": 10,
+    "name": "BBC News",
+    "snapChars": 46309,
+    "snapTokens": 11577,
+    "navChars": 99,
+    "navTokens": 25,
+    "navTime": 886,
+    "snapTime": 19,
+    "totalTime": 905
+  }
+]

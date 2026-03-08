@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "name": "Wikipedia (static article)",
+    "chars": 10007,
+    "tokens": 2501,
+    "navTime": 2246,
+    "domTime": 278,
+    "totalTime": 2524
+  },
+  {
+    "id": 2,
+    "name": "GitHub login",
+    "chars": 4423,
+    "tokens": 1105,
+    "navTime": 2964,
+    "domTime": 125,
+    "totalTime": 3089
+  },
+  {
+    "id": 3,
+    "name": "DataTables",
+    "chars": 6225,
+    "tokens": 1556,
+    "navTime": 2619,
+    "domTime": 179,
+    "totalTime": 2798
+  },
+  {
+    "id": 4,
+    "name": "Excalidraw (canvas)",
+    "chars": 3106,
+    "tokens": 776,
+    "navTime": 2648,
+    "domTime": 61,
+    "totalTime": 2709
+  },
+  {
+    "id": 5,
+    "name": "GitHub Issues (React SPA)",
+    "chars": 2433,
+    "tokens": 608,
+    "navTime": 2545,
+    "domTime": 113,
+    "totalTime": 2658
+  },
+  {
+    "id": 6,
+    "name": "YouTube",
+    "chars": 36463,
+    "tokens": 9115,
+    "navTime": 3751,
+    "domTime": 611,
+    "totalTime": 4362
+  },
+  {
+    "id": 7,
+    "name": "Shoelace (web components)",
+    "chars": 7216,
+    "tokens": 1804,
+    "navTime": 2168,
+    "domTime": 221,
+    "totalTime": 2389
+  },
+  {
+    "id": 8,
+    "name": "Amazon",
+    "chars": 21475,
+    "tokens": 5368,
+    "navTime": 3558,
+    "domTime": 519,
+    "totalTime": 4077
+  },
+  {
+    "id": 9,
+    "name": "example.com",
+    "chars": 138,
+    "tokens": 34,
+    "navTime": 2090,
+    "domTime": 41,
+    "totalTime": 2131
+  },
+  {
+    "id": 10,
+    "name": "BBC News",
+    "chars": 5675,
+    "tokens": 1418,
+    "navTime": 2382,
+    "domTime": 205,
+    "totalTime": 2587
+  }
+]

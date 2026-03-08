@@ -1,0 +1,191 @@
+[76]<div id=__next />
+	[77]<button role=button aria-label=Open menu expanded=false />
+	[78]<a />
+		[550]<span />
+			[551]<span />
+				[552]<svg /> <!-- SVG content collapsed -->
+			[555]<span />
+				Watch Live
+	[79]<div />
+		[80]<a />
+	[81]<button />
+		Subscribe
+	[82]<a />
+		[83]<button aria-label=Sign In />
+			Sign In
+	[3]<a />
+		Home
+	[85]<a />
+		News
+	[86]<a />
+		Sport
+	[87]<a />
+		Business
+	[88]<a />
+		Technology
+	[89]<a />
+		Health
+	[90]<a />
+		Culture
+	[598]<li level=1 />
+		[91]<a />
+			Arts
+	[92]<a />
+		Travel
+	[93]<a />
+		Earth
+	[94]<a />
+		Audio
+	[95]<a />
+		Video
+	[614]<li level=1 />
+		[96]<a />
+			Live
+	[97]<a />
+		Documentaries
+	[98]<a />
+		US & Canada
+	[626]<li level=1 />
+		[99]<a />
+			UK
+	[629]<li level=1 />
+		[100]<a />
+			Africa
+	[632]<li level=1 />
+		[101]<a />
+			Asia
+	[102]<a />
+		Australia
+	[103]<a />
+		Europe
+	[104]<a />
+		Latin America
+	[105]<a />
+		Middle East
+	[106]<a />
+		In Pictures
+	[107]<a />
+		BBC InDepth
+	[108]<a />
+		BBC Verify
+	[776]<span />
+		Advertisement
+	|scroll element[46]<iframe id=google_ads_iframe_/4817/bbccom/news/news_home/index/top_0 title=3rd party ad content aria-label=Advertisement /> (scroll)
+		[2010]<a id=aw0 />
+			[2011]<amp-img />
+				[2012]<img />
+		[2014]<div id=abgcp />
+			[2019]<div id=abgb />
+				[2020]<a />
+		[2031]<div />
+		[2032]<div />
+			[2033]<svg /> <!-- SVG content collapsed -->
+	... (10 more elements below - scroll to reveal):
+	    <div> "(no label)" ~-1.0 pages down
+	    <path> "(no label)" ~-1.0 pages down
+	    <div> "(no label)" ~-0.9 pages down
+	    <div> "(no label)" ~-0.9 pages down
+	    <div> "(no label)" ~-0.9 pages down
+	    <div> "(no label)" ~-0.9 pages down
+	    <span> "(no label)" ~-0.8 pages down
+	    <span> "(no label)" ~-0.8 pages down
+	    <span> "(no label)" ~-0.8 pages down
+	    <span> "(no label)" ~-0.8 pages down
+	<svg /> <!-- SVG content collapsed -->
+	[131]<div />
+		[12]<div />
+			[133]<img alt=A large tower is shown with flames on the side />
+		[800]<div />
+			[801]<div />
+				[802]<div />
+					[13]<div />
+						[803]<svg /> <!-- SVG content collapsed -->
+						[806]<span />
+							LIVE
+					[808]<h2 level=2 />
+						Huge fire engulfs Kuwait City tower as Trump accuses Starmer of seeking to 'join wars after we've already won'
+			[810]<p />
+				Heavy Israeli airstrikes hit Iranian oil depots, with residents telling the BBC 'it was as if the night had turned into day'.
+	[134]<div />
+		[135]<a />
+			Watch: Huge flames in Tehran after Israeli strikes on oil refineries
+			Social media footage shows flames leaping into the air and plumes of smoke above the city's skyline.
+	[137]<div />
+		[138]<a />
+			Why did Iran's president apologise?
+			The apology may hint at a political repositioning inside Iran, writes BBC Persian's Amir Azmi.
+	[140]<div />
+		[141]<a />
+			Dozens killed as Israeli special forces raid Lebanese village in search of 40-year-old remains
+			Overnight, one Israeli operation saw at least 41 people killed and 40 injured, according to the Lebanese health ministry.
+	[143]<div />
+		[144]<a />
+			Watch: Moment of drone strike close to Dubai Airport
+			Video filmed by a witness and verified by the BBC shows a drone crashing close to the airport.
+	[146]<div />
+		[147]<a />
+			Iranian ambassador warns UK to be 'very careful' about further involvement in war
+			Seyed Ali Mousavi says Iran has a "right to self-defence" if the UK directly joins US-Israeli attacks.
+	[865]<hr />
+	More top stories
+	[149]<div />
+		[877]<div />
+			[151]<img alt=A barreleye (Opisthoproctus soleatus) seen from above with bulbous eyes swims in the deep sea - ther... />
+		[881]<div />
+			[882]<div />
+				[883]<div />
+					[884]<h2 level=2 />
+						Spectacular images reveal unique sea creatures and corals off Caribbean islands
+			[886]<p />
+				Scientists discover underwater mountain ranges, golden towers of coral, and never-before-seen sea creatures.
+			[888]<div />
+				[889]<span />
+					5 hrs ago
+				[891]<div />
+				[892]<span />
+					Latin America
+	[153]<div />
+		[154]<a />
+			Dancers loved practising in this Singapore walkway. Then the complaints came
+			In super-organised Singapore, disputes over public space are a battle between control and chaos.
+			7 hrs ago
+			Asia
+	[156]<div />
+		[157]<a />
+			Rapper-politician Balendra Shah unseats Nepal's ex-PM as he heads for victory
+			Thursday's general election was the first since violent youth-led protests toppled the government in September.
+			2 hrs ago
+			Asia
+	[158]<div />
+		[159]<a />
+			Timothée Chalamet triggers backlash over ballet and opera remarks
+			In an interview, the Oscar-nominee danced into some online controversy after claiming no one cares about ballet and opera.
+			18 hrs ago
+			US & Canada
+	[160]<div />
+		[161]<a />
+			The heartwarming tale of a father, a daughter, and a wedding band wowing India
+			Band Baaja Bitiya is the moving tale of a father who goes to rescue his daughter from her matrimonial home.
+			6 hrs ago
+			Asia
+	[163]<div />
+		[164]<a />
+			Boy, 12, among six dead as tornadoes hit Michigan and Oklahoma
+			The storms uprooted trees, downed power lines, damaged buildings and ripped the roofs off some houses.
+			5 hrs ago
+			US & Canada
+	[166]<div />
+		[167]<a />
+			Explosion reported outside US embassy in Oslo, police say
+			Police sent "large resources" to the embassy at 01:00 local time after reports of an explosion.
+			1 hr ago
+			Europe
+	[169]<div />
+		[170]<a />
+			King reflects on 'pressures of conflict' in Commonwealth message
+			King Charles hails the value of the Commonwealth in divided times in his annual message.
+			8 hrs ago
+			UK
+	[1029]<span />
+		Advertisement
+	[53]<div id=ozone_closebutton_dotcom-slot-mid_1 />

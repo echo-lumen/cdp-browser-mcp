@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "name": "Wikipedia (static article)",
+    "chars": 24347,
+    "tokens": 6087,
+    "elements": 668,
+    "pageTextChars": 56942,
+    "navTime": 2744,
+    "domTime": 74,
+    "totalTime": 2818
+  },
+  {
+    "id": 2,
+    "name": "GitHub login",
+    "chars": 2764,
+    "tokens": 691,
+    "elements": 59,
+    "pageTextChars": 1726,
+    "navTime": 3442,
+    "domTime": 24,
+    "totalTime": 3466
+  },
+  {
+    "id": 3,
+    "name": "DataTables",
+    "chars": 7998,
+    "tokens": 2000,
+    "elements": 191,
+    "pageTextChars": 5425,
+    "navTime": 3292,
+    "domTime": 32,
+    "totalTime": 3324
+  },
+  {
+    "id": 4,
+    "name": "Excalidraw (canvas)",
+    "chars": 880,
+    "tokens": 220,
+    "elements": 28,
+    "pageTextChars": 430,
+    "navTime": 3108,
+    "domTime": 12,
+    "totalTime": 3120
+  },
+  {
+    "id": 5,
+    "name": "GitHub Issues (React SPA)",
+    "chars": 2328,
+    "tokens": 582,
+    "elements": 69,
+    "pageTextChars": 955,
+    "navTime": 2940,
+    "domTime": 18,
+    "totalTime": 2958
+  },
+  {
+    "id": 6,
+    "name": "YouTube",
+    "chars": 13479,
+    "tokens": 3370,
+    "elements": 237,
+    "pageTextChars": 5499,
+    "navTime": 4480,
+    "domTime": 52,
+    "totalTime": 4532
+  },
+  {
+    "id": 7,
+    "name": "Shoelace (web components)",
+    "chars": 13266,
+    "tokens": 3317,
+    "elements": 267,
+    "pageTextChars": 9199,
+    "navTime": 2720,
+    "domTime": 27,
+    "totalTime": 2747
+  },
+  {
+    "id": 8,
+    "name": "Amazon",
+    "chars": 302,
+    "tokens": 76,
+    "elements": 5,
+    "pageTextChars": 0,
+    "navTime": 2791,
+    "domTime": 5,
+    "totalTime": 2796
+  },
+  {
+    "id": 9,
+    "name": "example.com",
+    "chars": 115,
+    "tokens": 29,
+    "elements": 1,
+    "pageTextChars": 129,
+    "navTime": 2571,
+    "domTime": 6,
+    "totalTime": 2577
+  },
+  {
+    "id": 10,
+    "name": "BBC News",
+    "chars": 18640,
+    "tokens": 4660,
+    "elements": 130,
+    "pageTextChars": 9537,
+    "navTime": 3173,
+    "domTime": 26,
+    "totalTime": 3199
+  }
+]

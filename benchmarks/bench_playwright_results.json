@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "Wikipedia (static article)",
+    "chars": 220952,
+    "tokens": 55238
+  },
+  {
+    "id": 2,
+    "name": "GitHub login",
+    "chars": 2544,
+    "tokens": 636
+  },
+  {
+    "id": 3,
+    "name": "DataTables",
+    "chars": 36968,
+    "tokens": 9242
+  },
+  {
+    "id": 4,
+    "name": "Excalidraw (canvas)",
+    "chars": 6487,
+    "tokens": 1621
+  },
+  {
+    "id": 5,
+    "name": "GitHub Issues (React SPA)",
+    "chars": 70395,
+    "tokens": 17598
+  },
+  {
+    "id": 6,
+    "name": "YouTube",
+    "chars": 68006,
+    "tokens": 17001
+  },
+  {
+    "id": 7,
+    "name": "Shoelace (web components)",
+    "chars": 70506,
+    "tokens": 17626
+  },
+  {
+    "id": 8,
+    "name": "Amazon",
+    "chars": 704,
+    "tokens": 176
+  },
+  {
+    "id": 9,
+    "name": "example.com",
+    "chars": 316,
+    "tokens": 79
+  },
+  {
+    "id": 10,
+    "name": "BBC News",
+    "chars": 68767,
+    "tokens": 17191
+  }
+]
