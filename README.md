@@ -15,22 +15,22 @@ LLM-driven browser automation has a token problem. Every page snapshot eats cont
 | [chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) (Google, 28K+ stars) | ~8,500 | Full page | Verbose AX tree format |
 | [Playwright MCP](https://github.com/microsoft/playwright-mcp) | ~17,000 | Full page | YAML ariaSnapshot format |
 
-**browser-use** has the smallest per-viewport size because it filters to viewport-visible elements only. But when you need the full page, scrolling adds up fast. We measured the actual full-page cost by scrolling browser-use through each page and summing all viewport snapshots:
+**browser-use** has the smallest per-viewport size because it filters to viewport-visible elements only. But when you need the full page, scrolling adds up fast. We measured the actual full-page cost by scrolling browser-use through each page and summing all viewport snapshots (approximate tokens = characters ÷ 4):
 
-| Page | browser-use (viewport) | browser-use (full page) | cdp-browser-mcp | Ratio |
-|---|---|---|---|---|
-| Wikipedia | 2,502 (1 of 19 scrolls) | **61,270** | **6,087** | 10x more |
-| YouTube | 9,166 (1 of 30+ scrolls) | **326,706** | **3,338** | 98x more |
-| Shoelace | 1,794 (1 of 9 scrolls) | **20,442** | **3,317** | 6.2x more |
-| BBC News | 1,421 (1 of 7 scrolls) | **12,185** | **4,647** | 2.6x more |
-| DataTables | 1,555 (1 of 4 scrolls) | **6,099** | **2,001** | 3x more |
-| GitHub Issues | 592 (fits in viewport) | 592 | 3,832 | 0.15x (browser-use wins) |
-| Excalidraw | 781 (fits in viewport) | 781 | 220 | 3.5x more |
-| example.com | 34 (fits in viewport) | 34 | 29 | ~same |
+| Page | browser-use (full page) | cdp-browser-mcp (1 call) | Ratio |
+|---|---|---|---|
+| Wikipedia | 61,270 (19 scrolls) | **6,087** | 10x more |
+| YouTube | 40,055 (4 scrolls)† | **3,338** | 12x more |
+| Shoelace | 20,442 (9 scrolls) | **3,317** | 6.2x more |
+| BBC News | 12,185 (7 scrolls) | **4,647** | 2.6x more |
+| DataTables | 6,099 (4 scrolls) | **2,001** | 3x more |
+| GitHub Issues | **592** (fits in viewport) | 3,832 | browser-use wins |
+| Excalidraw | 781 (fits in viewport) | **220** | 3.5x more |
+| example.com | 34 (fits in viewport) | **29** | ~same |
 
-YouTube's scroll height grows infinitely (lazy-loading recommendations), so browser-use hit the 30-scroll safety limit at 326K tokens and still hadn't reached the bottom. cdp-browser-mcp captures the initial page state in 3,338 tokens.
+† YouTube has infinite scroll — we capped at 4 viewports (initial page height) for a fair comparison.
 
-browser-use wins on pages that fit in a single viewport (GitHub Issues). For everything else — and especially content-heavy or infinite-scroll pages — the full-page approach uses dramatically fewer tokens.
+browser-use wins on pages that fit in a single viewport (GitHub Issues). For everything else — especially content-heavy or infinite-scroll pages — the full-page approach uses dramatically fewer total tokens.
 
 **cdp-browser-mcp** gives you the full page in one call — the most token-efficient approach when you need to see or search across the entire page. Built on [browser-autopilot](https://www.npmjs.com/package/browser-autopilot), which reads Chrome's Accessibility tree via CDP and compresses it into a compact indexed format. No JavaScript injection, no DOM walking, no SVG noise.
 
@@ -150,9 +150,19 @@ Use the `[N]` index with `cdp_click` or `cdp_type`. Non-interactive content (hea
 
 ## Benchmarks
 
-### Multi-page benchmark (8 page types, 2026-03-07)
+### Methodology
 
-Tested across diverse page types — static content, SPAs, canvas apps, web components, news sites. All values are approximate tokens (chars/4). browser-use shows both per-viewport and full-page cost (sum of all scroll positions needed to see the entire page):
+All benchmarks ran on the same machine (Mac Mini, Chrome 145) with all 5 tools connecting to the same Chrome instance via CDP on port 9222. Same viewport size (1,309 × 1,309px), same pages, same session.
+
+**What the numbers measure:** Each tool returns a text representation of the page (accessibility tree, DOM snapshot, or YAML). We measure the **character count** of that output and estimate tokens as **characters ÷ 4**. This is a rough approximation — actual tokenizer counts vary by model — but the ratios between tools hold regardless of tokenizer.
+
+**How snapshots were captured:** Navigate to URL → wait 2–3 seconds for page load → capture the tool's DOM/accessibility representation. Each tool uses its own serialization format (see [format comparison](#why-the-differences) below).
+
+**Full-page scroll test (browser-use only):** browser-use returns only the viewport-visible portion of the page. To measure the total cost of seeing the full page, we scrolled down by one viewport height at a time, re-captured the state at each position, and summed all viewport snapshots. This is what an LLM agent using browser-use would actually consume to read the entire page. For infinite-scroll pages (YouTube), we limited scrolling to the initial page height to keep the comparison fair.
+
+### Per-snapshot results (8 page types, 2026-03-07)
+
+All values are approximate tokens (characters ÷ 4):
 
 | # | Page type | browser-use (viewport) | browser-use (full page) | cdp-browser-mcp | chrome-devtools-mcp | Playwright MCP |
 |---|---|---|---|---|---|---|
@@ -160,14 +170,16 @@ Tested across diverse page types — static content, SPAs, canvas apps, web comp
 | 2 | DataTables (data table) | 1,555 | 6,099 (4 scrolls) | **2,001** | 7,859 | 9,242 |
 | 3 | Excalidraw (canvas app) | 781 | 781 | **220** | 876 | 1,622 |
 | 4 | GitHub Issues (React SPA) | **592** | **592** | 3,832 | 4,647 | 17,599 |
-| 5 | YouTube (iframe-heavy) | 9,166 | 326,706 (30+ scrolls) | **3,338** | 8,453 | 17,002 |
+| 5 | YouTube (iframe-heavy) | 9,166 | 40,055 (4 scrolls)† | **3,338** | 8,453 | 17,002 |
 | 6 | Shoelace (web components) | 1,794 | 20,442 (9 scrolls) | **3,317** | 10,391 | 17,627 |
 | 7 | example.com (minimal) | 34 | 34 | **29** | 90 | 79 |
 | 8 | BBC News (news + ads) | 1,421 | 12,185 (7 scrolls) | **4,647** | 11,577 | 17,192 |
 
+† YouTube has infinite scroll — new content lazy-loads as you scroll. We capped at 4 viewports (covering the initial 4,318px page height) for a fair comparison. Uncapped, browser-use hit 326,706 tokens across 30 scrolls without reaching the bottom.
+
 cdp-browser-mcp is a thin MCP wrapper around [`browser-autopilot`](https://www.npmjs.com/package/browser-autopilot)'s `CDPBrowser` — they produce identical snapshots (verified by running both independently on all 8 pages). The MCP layer adds zero token overhead.
 
-**browser-use full-page cost:** When you need to see the entire page, browser-use's scrolling adds up significantly. Wikipedia costs 61K tokens across 19 scrolls vs 6K in a single cdp-browser-mcp call (10x). YouTube's infinite scroll hit the 30-scroll safety limit at 327K tokens — cdp-browser-mcp captures the initial page in 3.3K (98x). browser-use wins only on pages that fit in a single viewport (GitHub Issues: 592 vs 3,832).
+**browser-use full-page cost:** When you need to see the entire page, browser-use's per-viewport advantage disappears. Wikipedia costs 61K tokens across 19 scrolls vs 6K in a single cdp-browser-mcp call (10x). YouTube costs 40K across 4 scrolls vs 3.3K (12x). browser-use wins only on pages that fit in a single viewport (GitHub Issues: 592 vs 3,832).
 
 **cdp-browser-mcp vs chrome-devtools-mcp:** median **3.1x fewer tokens**, range 1.2x–9.4x.
 
@@ -175,12 +187,14 @@ cdp-browser-mcp is a thin MCP wrapper around [`browser-autopilot`](https://www.n
 
 ### Why the differences?
 
-| Tool | Snapshot strategy | Format |
+Same Chrome instance, same pages — the differences come from how each tool serializes the page:
+
+| Tool | What it captures | Output format |
 |---|---|---|
-| **[browser-use](https://github.com/browser-use/browser-use)** | Viewport only + paint order filtering + 100-char text cap | `[N]<tag attr=val />` with HTML-like syntax |
-| **browser-autopilot / cdp-browser-mcp** | Full page, all elements | `[N] role "name"` — compact indexed, text inlined |
-| **chrome-devtools-mcp** | Full page via Puppeteer | `uid=` prefix on every node, separate `StaticText` children |
-| **Playwright MCP** | Full page via ariaSnapshot | YAML with `[ref=]` tags, nested indentation |
+| **[browser-use](https://github.com/browser-use/browser-use)** | Viewport-visible elements only, filtered by paint order, 100-char text cap | `[N]<tag attr=val />` — HTML-like syntax |
+| **browser-autopilot / cdp-browser-mcp** | Full page accessibility tree via CDP | `[N] role "name"` — compact indexed format, text inlined |
+| **chrome-devtools-mcp** | Full page accessibility tree via Puppeteer | `uid=` prefix on every node, separate `StaticText` children |
+| **Playwright MCP** | Full page via Playwright's `ariaSnapshot()` | YAML with `[ref=]` tags, nested indentation |
 
 Notes:
 - Amazon blocked cdp-browser-mcp and chrome-devtools-mcp (anti-bot) but loaded for browser-use (5,368 tokens). GitHub login/dashboard differed due to auth state. Both excluded from cross-tool ratios.
@@ -189,7 +203,7 @@ Notes:
 
 ### Anti-bot detection
 
-All tools tested identically against bot.sannysoft.com (30/30 pass) and Cloudflare Turnstile:
+All 5 tools tested identically against [bot.sannysoft.com](https://bot.sannysoft.com) (30/30 pass) and Cloudflare Turnstile:
 
 | Signal | Result (all tools) |
 |---|---|
@@ -199,7 +213,9 @@ All tools tested identically against bot.sannysoft.com (30/30 pass) and Cloudfla
 | Sannysoft pass rate | 30/30 |
 | Cloudflare Turnstile | Challenge shown |
 
-No detection advantage to any tool — they all present as real Chrome. browser-use uses Playwright (which sets `navigator.webdriver = false` by default). cdp-browser-mcp and chrome-devtools-mcp connect to your existing Chrome instance.
+No stealth advantage to any tool — they all present as real Chrome. browser-use uses Playwright (which sets `navigator.webdriver = false` by default). cdp-browser-mcp and chrome-devtools-mcp attach to your existing Chrome instance via CDP.
+
+Raw benchmark data (JSON results + sample snapshots) is available in the [`benchmarks/`](benchmarks/) directory.
 
 ## When to use other tools instead
 
