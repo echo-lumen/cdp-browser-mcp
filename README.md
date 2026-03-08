@@ -205,7 +205,7 @@ Notes:
 
 ### Anti-bot detection
 
-All 5 tools tested identically against [bot.sannysoft.com](https://bot.sannysoft.com) (30/30 pass) and Cloudflare Turnstile:
+**Browser fingerprinting:** All 5 tools tested identically against [bot.sannysoft.com](https://bot.sannysoft.com) (30/30 pass) and Cloudflare Turnstile:
 
 | Signal | Result (all tools) |
 |---|---|
@@ -215,7 +215,22 @@ All 5 tools tested identically against [bot.sannysoft.com](https://bot.sannysoft
 | Sannysoft pass rate | 30/30 |
 | Cloudflare Turnstile | Challenge shown |
 
-No stealth advantage to any tool — they all present as real Chrome. browser-use uses Playwright (which sets `navigator.webdriver = false` by default). cdp-browser-mcp and chrome-devtools-mcp attach to your existing Chrome instance via CDP.
+No stealth advantage at the fingerprinting level — they all present as real Chrome.
+
+**Real-world anti-bot (Amazon):** Fingerprinting tests don't tell the full story. We tested all tools on an Amazon search page (`/s?k=mechanical+keyboard`), and the results diverged:
+
+| Tool | Result | Tokens |
+|---|---|---|
+| browser-use | Full search results loaded | 7,340 |
+| cdp-browser-mcp | "Sorry! Something went wrong!" (503) | 91 |
+| chrome-devtools-mcp | Same 503 error page | 291 |
+| Playwright MCP | Same 503 error page | 230 |
+
+All four tools connected to the **same Chrome instance** via CDP. Same browser, same IP, same cookies — yet Amazon served different responses. browser-use got the full page while the other three hit Amazon's server-side bot detection.
+
+The likely cause isn't fingerprinting (identical browser) but **navigation behavior**: how each tool makes HTTP requests, handles redirects, and manages request timing. Amazon's anti-bot operates at the request/session level, not the browser level, and different tools' navigation patterns trigger it differently.
+
+Takeaway: basic fingerprinting tests (sannysoft, Cloudflare) show all tools as identical. But real-world anti-bot systems are more sophisticated, and tool behavior at the network level can make a difference that browser-level tests don't reveal.
 
 Raw benchmark data (JSON results + sample snapshots) is available in the [`benchmarks/`](benchmarks/) directory.
 
