@@ -8,14 +8,29 @@ One `cdp_navigate` call returns a compact DOM with every interactive element ind
 
 LLM-driven browser automation has a token problem. Every page snapshot eats context window. We benchmarked 5 browser tools across 8 page types:
 
-| Tool | Median tokens/snapshot | Full page? | Notes |
+| Tool | Median tokens | Full page? | Notes |
 |---|---|---|---|
-| [browser-use](https://github.com/browser-use/browser-use) (80K+ stars) | ~1,500 | Viewport only | Needs scroll calls to see full page |
+| [browser-use](https://github.com/browser-use/browser-use) (80K+ stars) | ~1,500 per viewport | Viewport only | Needs scroll calls to see full page |
 | **[browser-autopilot](https://www.npmjs.com/package/browser-autopilot) / cdp-browser-mcp** | **~3,300** | **Full page** | Complete DOM in 1 call |
 | [chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) (Google, 28K+ stars) | ~8,500 | Full page | Verbose AX tree format |
 | [Playwright MCP](https://github.com/microsoft/playwright-mcp) | ~17,000 | Full page | YAML ariaSnapshot format |
 
-**browser-use** has the smallest per-snapshot size because it filters to viewport-visible elements only. But for a page like Wikipedia (14 pages of content), you'd need ~15 scroll calls at ~2,500 tokens each (~37,500 total) vs our single 6,087-token snapshot of the full page.
+**browser-use** has the smallest per-viewport size because it filters to viewport-visible elements only. But when you need the full page, scrolling adds up fast. We measured the actual full-page cost by scrolling browser-use through each page and summing all viewport snapshots:
+
+| Page | browser-use (viewport) | browser-use (full page) | cdp-browser-mcp | Ratio |
+|---|---|---|---|---|
+| Wikipedia | 2,502 (1 of 19 scrolls) | **61,270** | **6,087** | 10x more |
+| YouTube | 9,166 (1 of 30+ scrolls) | **326,706** | **3,338** | 98x more |
+| Shoelace | 1,794 (1 of 9 scrolls) | **20,442** | **3,317** | 6.2x more |
+| BBC News | 1,421 (1 of 7 scrolls) | **12,185** | **4,647** | 2.6x more |
+| DataTables | 1,555 (1 of 4 scrolls) | **6,099** | **2,001** | 3x more |
+| GitHub Issues | 592 (fits in viewport) | 592 | 3,832 | 0.15x (browser-use wins) |
+| Excalidraw | 781 (fits in viewport) | 781 | 220 | 3.5x more |
+| example.com | 34 (fits in viewport) | 34 | 29 | ~same |
+
+YouTube's scroll height grows infinitely (lazy-loading recommendations), so browser-use hit the 30-scroll safety limit at 326K tokens and still hadn't reached the bottom. cdp-browser-mcp captures the initial page state in 3,338 tokens.
+
+browser-use wins on pages that fit in a single viewport (GitHub Issues). For everything else — and especially content-heavy or infinite-scroll pages — the full-page approach uses dramatically fewer tokens.
 
 **cdp-browser-mcp** gives you the full page in one call — the most token-efficient approach when you need to see or search across the entire page. Built on [browser-autopilot](https://www.npmjs.com/package/browser-autopilot), which reads Chrome's Accessibility tree via CDP and compresses it into a compact indexed format. No JavaScript injection, no DOM walking, no SVG noise.
 
@@ -137,22 +152,22 @@ Use the `[N]` index with `cdp_click` or `cdp_type`. Non-interactive content (hea
 
 ### Multi-page benchmark (8 page types, 2026-03-07)
 
-Tested across diverse page types — static content, SPAs, canvas apps, web components, news sites. All values are approximate tokens (chars/4):
+Tested across diverse page types — static content, SPAs, canvas apps, web components, news sites. All values are approximate tokens (chars/4). browser-use shows both per-viewport and full-page cost (sum of all scroll positions needed to see the entire page):
 
-| # | Page type | browser-use | cdp-browser-mcp | chrome-devtools-mcp | Playwright MCP |
-|---|---|---|---|---|---|
-| 1 | Wikipedia (static article) | 2,501 | **6,087** | 57,288 | 55,238 |
-| 2 | DataTables (data table) | 1,556 | **2,001** | 7,859 | 9,242 |
-| 3 | Excalidraw (canvas app) | 776 | **220** | 876 | 1,622 |
-| 4 | GitHub Issues (React SPA) | 608 | **3,832** | 4,647 | 17,599 |
-| 5 | YouTube (iframe-heavy) | 9,115 | **3,338** | 8,453 | 17,002 |
-| 6 | Shoelace (web components) | 1,804 | **3,317** | 10,391 | 17,627 |
-| 7 | example.com (minimal) | 34 | **29** | 90 | 79 |
-| 8 | BBC News (news + ads) | 1,418 | **4,647** | 11,577 | 17,192 |
+| # | Page type | browser-use (viewport) | browser-use (full page) | cdp-browser-mcp | chrome-devtools-mcp | Playwright MCP |
+|---|---|---|---|---|---|---|
+| 1 | Wikipedia (static article) | 2,502 | 61,270 (19 scrolls) | **6,087** | 57,288 | 55,238 |
+| 2 | DataTables (data table) | 1,555 | 6,099 (4 scrolls) | **2,001** | 7,859 | 9,242 |
+| 3 | Excalidraw (canvas app) | 781 | 781 | **220** | 876 | 1,622 |
+| 4 | GitHub Issues (React SPA) | **592** | **592** | 3,832 | 4,647 | 17,599 |
+| 5 | YouTube (iframe-heavy) | 9,166 | 326,706 (30+ scrolls) | **3,338** | 8,453 | 17,002 |
+| 6 | Shoelace (web components) | 1,794 | 20,442 (9 scrolls) | **3,317** | 10,391 | 17,627 |
+| 7 | example.com (minimal) | 34 | 34 | **29** | 90 | 79 |
+| 8 | BBC News (news + ads) | 1,421 | 12,185 (7 scrolls) | **4,647** | 11,577 | 17,192 |
 
 cdp-browser-mcp is a thin MCP wrapper around [`browser-autopilot`](https://www.npmjs.com/package/browser-autopilot)'s `CDPBrowser` — they produce identical snapshots (verified by running both independently on all 8 pages). The MCP layer adds zero token overhead.
 
-**browser-use vs cdp-browser-mcp:** browser-use wins 5/8 pages on per-snapshot size because it filters to viewport-visible elements only. But it requires scroll calls to see content below the fold — on Wikipedia, that's 14+ scrolls at ~2,500 tokens each.
+**browser-use full-page cost:** When you need to see the entire page, browser-use's scrolling adds up significantly. Wikipedia costs 61K tokens across 19 scrolls vs 6K in a single cdp-browser-mcp call (10x). YouTube's infinite scroll hit the 30-scroll safety limit at 327K tokens — cdp-browser-mcp captures the initial page in 3.3K (98x). browser-use wins only on pages that fit in a single viewport (GitHub Issues: 592 vs 3,832).
 
 **cdp-browser-mcp vs chrome-devtools-mcp:** median **3.1x fewer tokens**, range 1.2x–9.4x.
 

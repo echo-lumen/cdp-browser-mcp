@@ -1,0 +1,514 @@
+[
+  {
+    "id": 1,
+    "name": "Wikipedia (static article)",
+    "viewportTokens": 2502,
+    "numScrolls": 19,
+    "totalChars": 245108,
+    "totalTokens": 61270,
+    "scrollStates": [
+      {
+        "scroll": 0,
+        "scrollY": 0,
+        "chars": 10009,
+        "tokens": 2502
+      },
+      {
+        "scroll": 1,
+        "scrollY": 1309,
+        "chars": 12030,
+        "tokens": 3007
+      },
+      {
+        "scroll": 2,
+        "scrollY": 2618,
+        "chars": 12071,
+        "tokens": 3017
+      },
+      {
+        "scroll": 3,
+        "scrollY": 3927,
+        "chars": 11366,
+        "tokens": 2841
+      },
+      {
+        "scroll": 4,
+        "scrollY": 5236,
+        "chars": 11534,
+        "tokens": 2883
+      },
+      {
+        "scroll": 5,
+        "scrollY": 6545,
+        "chars": 12129,
+        "tokens": 3032
+      },
+      {
+        "scroll": 6,
+        "scrollY": 7854,
+        "chars": 11773,
+        "tokens": 2943
+      },
+      {
+        "scroll": 7,
+        "scrollY": 9163,
+        "chars": 12316,
+        "tokens": 3079
+      },
+      {
+        "scroll": 8,
+        "scrollY": 10472,
+        "chars": 12604,
+        "tokens": 3151
+      },
+      {
+        "scroll": 9,
+        "scrollY": 11781,
+        "chars": 12859,
+        "tokens": 3214
+      },
+      {
+        "scroll": 10,
+        "scrollY": 13090,
+        "chars": 12200,
+        "tokens": 3050
+      },
+      {
+        "scroll": 11,
+        "scrollY": 14399,
+        "chars": 12218,
+        "tokens": 3054
+      },
+      {
+        "scroll": 12,
+        "scrollY": 15708,
+        "chars": 11074,
+        "tokens": 2768
+      },
+      {
+        "scroll": 13,
+        "scrollY": 17017,
+        "chars": 11757,
+        "tokens": 2939
+      },
+      {
+        "scroll": 14,
+        "scrollY": 18326,
+        "chars": 14484,
+        "tokens": 3621
+      },
+      {
+        "scroll": 15,
+        "scrollY": 19635,
+        "chars": 16427,
+        "tokens": 4106
+      },
+      {
+        "scroll": 16,
+        "scrollY": 20944,
+        "chars": 16229,
+        "tokens": 4057
+      },
+      {
+        "scroll": 17,
+        "scrollY": 22253,
+        "chars": 16499,
+        "tokens": 4124
+      },
+      {
+        "scroll": 18,
+        "scrollY": 22418,
+        "chars": 15529,
+        "tokens": 3882
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "DataTables",
+    "viewportTokens": 1555,
+    "numScrolls": 4,
+    "totalChars": 24403,
+    "totalTokens": 6099,
+    "scrollStates": [
+      {
+        "scroll": 0,
+        "scrollY": 0,
+        "chars": 6221,
+        "tokens": 1555
+      },
+      {
+        "scroll": 1,
+        "scrollY": 1309,
+        "chars": 8569,
+        "tokens": 2142
+      },
+      {
+        "scroll": 2,
+        "scrollY": 2618,
+        "chars": 5159,
+        "tokens": 1289
+      },
+      {
+        "scroll": 3,
+        "scrollY": 3111,
+        "chars": 4454,
+        "tokens": 1113
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Excalidraw (canvas)",
+    "viewportTokens": 781,
+    "numScrolls": 1,
+    "totalChars": 3127,
+    "totalTokens": 781,
+    "scrollStates": [
+      {
+        "scroll": 0,
+        "scrollY": 0,
+        "chars": 3127,
+        "tokens": 781
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "GitHub Issues (React SPA)",
+    "viewportTokens": 592,
+    "numScrolls": 1,
+    "totalChars": 2369,
+    "totalTokens": 592,
+    "scrollStates": [
+      {
+        "scroll": 0,
+        "scrollY": 0,
+        "chars": 2369,
+        "tokens": 592
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "YouTube",
+    "viewportTokens": 9166,
+    "numScrolls": 30,
+    "totalChars": 1306864,
+    "totalTokens": 326706,
+    "scrollStates": [
+      {
+        "scroll": 0,
+        "scrollY": 0,
+        "chars": 36664,
+        "tokens": 9166
+      },
+      {
+        "scroll": 1,
+        "scrollY": 1309,
+        "chars": 46809,
+        "tokens": 11702
+      },
+      {
+        "scroll": 2,
+        "scrollY": 2618,
+        "chars": 34687,
+        "tokens": 8671
+      },
+      {
+        "scroll": 3,
+        "scrollY": 3927,
+        "chars": 42064,
+        "tokens": 10516
+      },
+      {
+        "scroll": 4,
+        "scrollY": 5236,
+        "chars": 44186,
+        "tokens": 11046
+      },
+      {
+        "scroll": 5,
+        "scrollY": 5887,
+        "chars": 43300,
+        "tokens": 10825
+      },
+      {
+        "scroll": 6,
+        "scrollY": 7196,
+        "chars": 50482,
+        "tokens": 12620
+      },
+      {
+        "scroll": 7,
+        "scrollY": 8505,
+        "chars": 38034,
+        "tokens": 9508
+      },
+      {
+        "scroll": 8,
+        "scrollY": 9814,
+        "chars": 44669,
+        "tokens": 11167
+      },
+      {
+        "scroll": 9,
+        "scrollY": 11123,
+        "chars": 52113,
+        "tokens": 13028
+      },
+      {
+        "scroll": 10,
+        "scrollY": 12432,
+        "chars": 38554,
+        "tokens": 9638
+      },
+      {
+        "scroll": 11,
+        "scrollY": 13741,
+        "chars": 40087,
+        "tokens": 10021
+      },
+      {
+        "scroll": 12,
+        "scrollY": 15050,
+        "chars": 53571,
+        "tokens": 13392
+      },
+      {
+        "scroll": 13,
+        "scrollY": 16359,
+        "chars": 34181,
+        "tokens": 8545
+      },
+      {
+        "scroll": 14,
+        "scrollY": 17450,
+        "chars": 59653,
+        "tokens": 14913
+      },
+      {
+        "scroll": 15,
+        "scrollY": 18759,
+        "chars": 49332,
+        "tokens": 12333
+      },
+      {
+        "scroll": 16,
+        "scrollY": 19551,
+        "chars": 57579,
+        "tokens": 14394
+      },
+      {
+        "scroll": 17,
+        "scrollY": 20860,
+        "chars": 50333,
+        "tokens": 12583
+      },
+      {
+        "scroll": 18,
+        "scrollY": 22169,
+        "chars": 48309,
+        "tokens": 12077
+      },
+      {
+        "scroll": 19,
+        "scrollY": 23112,
+        "chars": 55967,
+        "tokens": 13991
+      },
+      {
+        "scroll": 20,
+        "scrollY": 24421,
+        "chars": 48792,
+        "tokens": 12198
+      },
+      {
+        "scroll": 21,
+        "scrollY": 25487,
+        "chars": 58228,
+        "tokens": 14557
+      },
+      {
+        "scroll": 22,
+        "scrollY": 26796,
+        "chars": 58392,
+        "tokens": 14598
+      },
+      {
+        "scroll": 23,
+        "scrollY": 28105,
+        "chars": 51383,
+        "tokens": 12845
+      },
+      {
+        "scroll": 24,
+        "scrollY": 29414,
+        "chars": 37789,
+        "tokens": 9447
+      },
+      {
+        "scroll": 25,
+        "scrollY": 30723,
+        "chars": 26032,
+        "tokens": 6508
+      },
+      {
+        "scroll": 26,
+        "scrollY": 32032,
+        "chars": 26398,
+        "tokens": 6599
+      },
+      {
+        "scroll": 27,
+        "scrollY": 33341,
+        "chars": 26905,
+        "tokens": 6726
+      },
+      {
+        "scroll": 28,
+        "scrollY": 34650,
+        "chars": 26721,
+        "tokens": 6680
+      },
+      {
+        "scroll": 29,
+        "scrollY": 35959,
+        "chars": 25650,
+        "tokens": 6412
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Shoelace (web components)",
+    "viewportTokens": 1794,
+    "numScrolls": 9,
+    "totalChars": 81778,
+    "totalTokens": 20442,
+    "scrollStates": [
+      {
+        "scroll": 0,
+        "scrollY": 0,
+        "chars": 7178,
+        "tokens": 1794
+      },
+      {
+        "scroll": 1,
+        "scrollY": 1309,
+        "chars": 9364,
+        "tokens": 2341
+      },
+      {
+        "scroll": 2,
+        "scrollY": 2618,
+        "chars": 11457,
+        "tokens": 2864
+      },
+      {
+        "scroll": 3,
+        "scrollY": 3927,
+        "chars": 10702,
+        "tokens": 2675
+      },
+      {
+        "scroll": 4,
+        "scrollY": 5236,
+        "chars": 10920,
+        "tokens": 2730
+      },
+      {
+        "scroll": 5,
+        "scrollY": 6545,
+        "chars": 10008,
+        "tokens": 2502
+      },
+      {
+        "scroll": 6,
+        "scrollY": 7854,
+        "chars": 9883,
+        "tokens": 2470
+      },
+      {
+        "scroll": 7,
+        "scrollY": 9163,
+        "chars": 7024,
+        "tokens": 1756
+      },
+      {
+        "scroll": 8,
+        "scrollY": 9919,
+        "chars": 5242,
+        "tokens": 1310
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "example.com",
+    "viewportTokens": 34,
+    "numScrolls": 1,
+    "totalChars": 137,
+    "totalTokens": 34,
+    "scrollStates": [
+      {
+        "scroll": 0,
+        "scrollY": 0,
+        "chars": 137,
+        "tokens": 34
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "BBC News",
+    "viewportTokens": 1421,
+    "numScrolls": 7,
+    "totalChars": 48748,
+    "totalTokens": 12185,
+    "scrollStates": [
+      {
+        "scroll": 0,
+        "scrollY": 0,
+        "chars": 5685,
+        "tokens": 1421
+      },
+      {
+        "scroll": 1,
+        "scrollY": 1293,
+        "chars": 8089,
+        "tokens": 2022
+      },
+      {
+        "scroll": 2,
+        "scrollY": 2602,
+        "chars": 7815,
+        "tokens": 1953
+      },
+      {
+        "scroll": 3,
+        "scrollY": 3911,
+        "chars": 7950,
+        "tokens": 1987
+      },
+      {
+        "scroll": 4,
+        "scrollY": 5220,
+        "chars": 6977,
+        "tokens": 1744
+      },
+      {
+        "scroll": 5,
+        "scrollY": 6529,
+        "chars": 6008,
+        "tokens": 1502
+      },
+      {
+        "scroll": 6,
+        "scrollY": 6585,
+        "chars": 6224,
+        "tokens": 1556
+      }
+    ]
+  }
+]
