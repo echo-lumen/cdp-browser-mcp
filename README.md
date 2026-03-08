@@ -121,11 +121,11 @@ google-chrome --remote-debugging-port=9222 \
 Every mutation tool auto-returns the updated DOM. Interactive elements are indexed:
 
 ```
-heading "Simon Willison Verified account"
+heading "Example User Verified account"
 [46] button "Profile Summary"
 [47] button "Search"
-[48] button "Following @simonw"
-article "Simon Willison @simonw Mar 6 Qwen3.5 4B apparently out-scores GPT-4o..."
+[48] button "Following @example_user"
+article "Example User @example_user Mar 6 Just published a new blog post about..."
 [98] button "41 Replies. Reply"
 [99] button "29 reposts. Repost"
 [100] button "545 Likes. Like"
@@ -211,7 +211,7 @@ The result is a compact, accurate representation of the page that naturally filt
 
 ## Built on browser-autopilot
 
-[`browser-autopilot`](https://www.npmjs.com/package/browser-autopilot) is the underlying engine by [@eigengajesh](https://github.com/nichochar). It's a full autonomous browser agent framework that goes well beyond what this MCP server exposes:
+[`browser-autopilot`](https://www.npmjs.com/package/browser-autopilot) is the underlying engine by [@eigengajesh](https://github.com/eigengajesh). It's a full autonomous browser agent framework that goes well beyond what this MCP server exposes:
 
 | Capability | cdp-browser-mcp | browser-autopilot |
 |---|---|---|
