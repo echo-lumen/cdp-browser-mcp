@@ -1,20 +1,20 @@
 # cdp-browser-mcp
 
-An MCP server for browser automation that uses Chrome's native Accessibility API instead of injected JavaScript. **~5x fewer tokens** than Playwright MCP per page snapshot (median 4.9x across 8 page types).
+An MCP server for browser automation that uses Chrome's native Accessibility API instead of injected JavaScript. **3–5x fewer tokens** than chrome-devtools-mcp and Playwright MCP per page snapshot.
 
 One `cdp_navigate` call returns a compact DOM with every interactive element indexed — ready for clicking, typing, and reading.
 
 ## Why this exists
 
-LLM-driven browser automation has a token problem. Every page snapshot eats context window. We benchmarked 4 browser tools on the same page (a Twitter/X profile) and found:
+LLM-driven browser automation has a token problem. Every page snapshot eats context window. We benchmarked 3 popular browser MCP tools across 8 page types and found:
 
-| Tool | Tokens per snapshot | Elements indexed |
+| Tool | Median tokens | vs cdp-browser-mcp |
 |---|---|---|
-| **cdp-browser-mcp** | **~2,700** | 177 |
-| Playwright MCP | ~14,700 | ~200 |
-| Browser Agent (custom JS) | ~19,300 | 1,786 |
+| **cdp-browser-mcp** | **~3,300** | — |
+| [chrome-devtools-mcp](https://github.com/nichochar/chrome-devtools-mcp) (Google) | ~8,500 | 3.1x more |
+| [Playwright MCP](https://github.com/nichochar/playwright-mcp) | ~17,000 | 4.9x more |
 
-The difference: cdp-browser-mcp reads Chrome's built-in Accessibility tree via CDP. No JavaScript injection, no DOM walking, no SVG noise. Just the semantic structure the browser already computed.
+The difference: cdp-browser-mcp reads Chrome's built-in Accessibility tree via CDP and compresses it into a compact indexed format. No JavaScript injection, no DOM walking, no SVG noise, no redundant `StaticText` nodes. Just the semantic structure the browser already computed.
 
 ## Quick start
 
@@ -132,27 +132,32 @@ Use the `[N]` index with `cdp_click` or `cdp_type`. Non-interactive content (hea
 
 ## Benchmarks
 
-### Multi-page benchmark (10 page types, 2026-03-07)
+### Multi-page benchmark (8 page types, 2026-03-07)
 
-Tested across diverse page types to validate the token reduction claim:
+Tested across diverse page types — static content, SPAs, canvas apps, web components, news sites:
 
-| # | Page type | CDP tokens | Playwright tokens | Ratio |
+| # | Page type | cdp-browser-mcp | chrome-devtools-mcp | Playwright MCP |
 |---|---|---|---|---|
-| 1 | Wikipedia (static article) | 6,087 | 55,238 | **9.1x** |
-| 2 | DataTables (data table) | 2,001 | 9,242 | **4.6x** |
-| 3 | Excalidraw (canvas app) | 220 | 1,622 | **7.4x** |
-| 4 | GitHub Issues (React SPA) | 3,832 | 17,599 | **4.6x** |
-| 5 | YouTube (iframe-heavy) | 3,338 | 17,002 | **5.1x** |
-| 6 | Shoelace (web components) | 3,317 | 17,627 | **5.3x** |
-| 7 | example.com (minimal) | 29 | 79 | **2.7x** |
-| 8 | BBC News (news + ads) | 4,647 | 17,192 | **3.7x** |
+| 1 | Wikipedia (static article) | **6,087** | 57,288 | 55,238 |
+| 2 | DataTables (data table) | **2,001** | 7,859 | 9,242 |
+| 3 | Excalidraw (canvas app) | **220** | 876 | 1,622 |
+| 4 | GitHub Issues (React SPA) | **3,832** | 4,647 | 17,599 |
+| 5 | YouTube (iframe-heavy) | **3,338** | 8,453 | 17,002 |
+| 6 | Shoelace (web components) | **3,317** | 10,391 | 17,627 |
+| 7 | example.com (minimal) | **29** | 90 | 79 |
+| 8 | BBC News (news + ads) | **4,647** | 11,577 | 17,192 |
 
-**Median: 4.9x fewer tokens. Average: 5.3x. Range: 2.7x–9.1x.**
+All values are approximate token counts (chars/4).
+
+**cdp-browser-mcp vs chrome-devtools-mcp (Google):** median 3.1x fewer tokens, range 1.2x–9.4x.
+**cdp-browser-mcp vs Playwright MCP:** median 4.9x fewer tokens, range 2.7x–9.1x.
+
+Why the difference? chrome-devtools-mcp uses Puppeteer's accessibility tree, which includes `uid=` prefixes on every node and separate `StaticText` children for every piece of text. Playwright MCP uses a YAML-formatted `ariaSnapshot()` with `[ref=]` tags. cdp-browser-mcp reads the same Chrome AX tree but compresses it — inlining text, stripping metadata, and indexing only interactive elements.
 
 Notes:
-- Amazon blocked both tools equally (anti-bot). GitHub login/dashboard differed due to auth state. Both excluded from ratios.
-- Token estimates use chars/4 approximation.
-- CDP's advantage is largest on content-heavy pages (Wikipedia 9.1x) and smallest on minimal pages (example.com 2.7x).
+- Amazon blocked all three tools equally (anti-bot). GitHub login/dashboard differed due to auth state. Both excluded from ratios.
+- chrome-devtools-mcp has additional capabilities not tested here (performance tracing, Lighthouse audits, network inspection, device emulation) — it's a broader tool aimed at web development debugging.
+- CDP's token advantage is largest on content-heavy pages (Wikipedia 9.4x vs Google, 9.1x vs Playwright) and smallest on already-compact pages.
 
 ### Single-page deep comparison (x.com/simonw)
 
@@ -181,8 +186,15 @@ All tools tested identically against bot.sannysoft.com (30/30 pass) and Cloudfla
 
 No detection advantage to any tool — they all present as real Chrome.
 
-## When to use Playwright MCP instead
+## When to use other tools instead
 
+**[chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp)** (Google, 28K+ stars):
+- You need performance profiling, Lighthouse audits, or memory snapshots
+- You need network request inspection
+- You want device emulation
+- You're debugging a web app, not automating browser tasks for an LLM agent
+
+**[Playwright MCP](https://github.com/nichochar/playwright-mcp)**:
 - Chrome on port 9222 isn't running (Playwright launches its own browser)
 - You need bio/prose text natively in the accessibility snapshot (without a second `cdp_page_text` call)
 - You need Playwright-specific features like file upload or form fill helpers
