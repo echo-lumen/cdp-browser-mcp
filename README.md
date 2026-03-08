@@ -1,6 +1,6 @@
 # cdp-browser-mcp
 
-An MCP server for browser automation that uses Chrome's native Accessibility API instead of injected JavaScript. **5.5x fewer tokens** than Playwright MCP per page snapshot.
+An MCP server for browser automation that uses Chrome's native Accessibility API instead of injected JavaScript. **~5x fewer tokens** than Playwright MCP per page snapshot (median 4.9x across 8 page types).
 
 One `cdp_navigate` call returns a compact DOM with every interactive element indexed — ready for clicking, typing, and reading.
 
@@ -132,7 +132,29 @@ Use the `[N]` index with `cdp_click` or `cdp_type`. Non-interactive content (hea
 
 ## Benchmarks
 
-Tested on `x.com/simonw` profile page (2026-03-07):
+### Multi-page benchmark (10 page types, 2026-03-07)
+
+Tested across diverse page types to validate the token reduction claim:
+
+| # | Page type | CDP tokens | Playwright tokens | Ratio |
+|---|---|---|---|---|
+| 1 | Wikipedia (static article) | 6,087 | 55,238 | **9.1x** |
+| 2 | DataTables (data table) | 2,001 | 9,242 | **4.6x** |
+| 3 | Excalidraw (canvas app) | 220 | 1,622 | **7.4x** |
+| 4 | GitHub Issues (React SPA) | 3,832 | 17,599 | **4.6x** |
+| 5 | YouTube (iframe-heavy) | 3,338 | 17,002 | **5.1x** |
+| 6 | Shoelace (web components) | 3,317 | 17,627 | **5.3x** |
+| 7 | example.com (minimal) | 29 | 79 | **2.7x** |
+| 8 | BBC News (news + ads) | 4,647 | 17,192 | **3.7x** |
+
+**Median: 4.9x fewer tokens. Average: 5.3x. Range: 2.7x–9.1x.**
+
+Notes:
+- Amazon blocked both tools equally (anti-bot). GitHub login/dashboard differed due to auth state. Both excluded from ratios.
+- Token estimates use chars/4 approximation.
+- CDP's advantage is largest on content-heavy pages (Wikipedia 9.1x) and smallest on minimal pages (example.com 2.7x).
+
+### Single-page deep comparison (x.com/simonw)
 
 | Metric | cdp-browser-mcp | Playwright MCP | Ratio |
 |---|---|---|---|
